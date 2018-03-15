@@ -1,0 +1,34 @@
+version: '3.2'
+services:
+  db:
+    image: mariadb:10.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3309:3306
+    command: --skip-networking=0 --bind-address=0.0.0.0
+
+  openldap:
+    image: osixia/openldap:1.2.0
+    restart: unless-stopped
+    environment:
+      LDAP_DOMAIN: sandbox.org
+      LDAP_ORGANISATION: sandbox
+      LDAP_ADMIN_PASSWORD: "admin"
+    ports:
+      - 9000:389
+    volumes:
+      - type: bind
+        source: ./bootstrap.ldif
+        target: /container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+    command: --copy-service
+
+  lam:
+    image: mwaeckerlin/lam
+    restart: unless-stopped
+    ports:
+      - 9001:80
+    links:
+      - openldap:ldap
+

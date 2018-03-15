@@ -1,0 +1,11 @@
+dn: ou=people, dc=sandbox,dc=org
+ou: people
+description: All people in organisation
+objectclass: organizationalunit
+
+dn: cn=Robert Smith,ou=people,dc=sandbox,dc=org
+objectclass: inetOrgPerson
+cn: Robert Smith
+sn: smith
+uid: test
+userpassword: test
